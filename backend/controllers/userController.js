@@ -95,6 +95,20 @@ const logoutUser = (req, res) => {
 };
 
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private
+const getAllUsers = asyncHandler(async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(500);
+    next(error);
+  }
+});
+
+
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -162,4 +176,4 @@ const deleteUser = asyncHandler( async (req, res) => {
 });
 
 
-export { authUser, getUser, registerUser, logoutUser, updateUser, deleteUser };
+export { authUser, getAllUsers, getUser, registerUser, logoutUser, updateUser, deleteUser };

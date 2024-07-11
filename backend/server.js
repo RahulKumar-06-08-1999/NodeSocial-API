@@ -28,14 +28,19 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Enable CORS for all routes
+// // Enable CORS for all routes
 app.use(cors());
 
 // Sanitize data
 app.use(mongoSanitize());
 
 // Set security headers
-app.use(helmet());
+// app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 // Prevent XSS attacks
 app.use(xss());

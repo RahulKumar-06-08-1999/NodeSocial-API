@@ -4,13 +4,10 @@ import path from 'path';
 // Set storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/home/rahul/Downloads/learnMern/backend/uploads/'); // Set the destination for the uploaded files
+    cb(null, '/home/rahul/Downloads/backMern/backend/uploads/'); // Set the destination for the uploaded files to be relative
   },
   filename: function (req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    ); // Set the file name
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`); // Set the file name
   },
 });
 
