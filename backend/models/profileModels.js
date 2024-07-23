@@ -1,44 +1,44 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const profileSchema = mongoose.Schema(
-  {
+const profileSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  profileLink: {
+    type: String,
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  photo: {
+    type: String,
+  },
+  followers: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-    },
-    username: {
-      type: String,
-      required: [true, 'Username is required'],
-      unique: true,
-    },
-    photo: {
-      type: String,
-      default: 'no-photo.jpg',
-    },
-    followers: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User', // Adjust to 'User' if followers are users
-        },
-      },
-    ],
-    following: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User', // Adjust to 'User' if following are users
-        },
-      },
-    ],
+      required: true
+    }
+  }],
+  following: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    }
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
-  {
-    timestamps: true,
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
-);
-
-profileSchema.index({ username: 1 });
+});
 
 const Profile = mongoose.model('Profile', profileSchema);
 export default Profile;

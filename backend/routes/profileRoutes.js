@@ -4,13 +4,12 @@ const router = express.Router();
 import {
   createProfile,
   getProfileByUserId,
-  getProfileLinkByUserId,
   updateProfile,
   getFollowers,
   getFollowing,
   followUser,
   unfollowUser,
-  uploadProfilePhoto // Import the new controller function
+  uploadProfilePhoto 
 } from '../controllers/profileController.js';
 
 import { protect } from '../middleware/authMiddleware.js';
@@ -20,7 +19,7 @@ import upload from '../middleware/uploadMiddleware.js';
 router.route('/').post(protect, createProfile).get(protect, getProfileByUserId);
 
 // Route for get profile link by userid
-router.route("/:userId").get(getProfileLinkByUserId);
+// router.route("/:userId").get(getProfileLinkByUserId);
 
 // Route for uploading profile photo (uses a different endpoint)
 router.route('/uploads').post(protect, upload.single('photo'), uploadProfilePhoto);
@@ -30,6 +29,7 @@ router.route('/').put(protect, updateProfile);
 
 // Route for getting followers of a profile
 router.route('/followers').get(protect, getFollowers);
+
 
 // Route for getting following of a profile
 router.route('/following').get(protect, getFollowing);
