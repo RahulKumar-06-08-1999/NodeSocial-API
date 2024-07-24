@@ -73,8 +73,8 @@ export const uploadProfilePhoto = asyncHandler(async (req, res) => {
 // @access  Private
 const getProfileByUserId = asyncHandler(async (req, res) => {
   try {
-    console.log("Request User:", req.user);
-    console.log("Fetching profile for userId:", req.user._id);
+    // console.log("Request User:", req.user);
+    // console.log("Fetching profile for userId:", req.user._id);
 
     const profile = await Profile.findOne({ user: req.user._id }).populate({
       path: "user",
@@ -110,25 +110,31 @@ const getProfileByUserId = asyncHandler(async (req, res) => {
 // @desc    Get profile by link
 // @route   GET /api/profiles/:userId
 // @access  Private
-// const getProfileLinkByUserId = asyncHandler(async (req, res) => {
+const getProfileLinkByUserId = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log("User ID:", id);
 
-//   const { id } = req.params;
-//   console.log("User", id);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log("Invalid user ID");
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
 
-//   try {
-//     const profile = await Profile.findOne({ user: id });
-//     console.log("profile", profile);
+  try {
+    const profile = await Profile.findOne({ user: id });
+    console.log("Profile found:", profile);
 
-//     if (profile) {
-//       res.json({ profile });
-//     } else {
-//       res.status(404).json({ message: 'Profile not found' });
-//     }
-//   } catch (error) {
-//     console.error('Error fetching profile link:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
+    if (profile) {
+      res.json({ profile });
+    } else {
+      res.status(404).json({ message: 'Profile not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching profile link:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 
 
 
@@ -158,10 +164,10 @@ const updateProfile = asyncHandler(async (req, res) => {
 // @desc    Get followers for the logged-in user
 // @route   GET /api/profiles/followers
 // @access  Private
-const getFollowers = async (req, res) => {
+const getFollowers = asyncHandler(async (req, res) => {
   try {
     // Log start of the function
-    console.log("Starting getFollowers function");
+    // console.log("Starting getFollowers function");
 
     // Assuming req.user._id is the logged-in user's ObjectId
     const userId = req.user._id;
@@ -184,7 +190,7 @@ const getFollowers = async (req, res) => {
     // Extract follower user IDs from the userProfile
     const followerIds = userProfile.followers.map((follower) => {
       if (!mongoose.Types.ObjectId.isValid(follower.user)) {
-        console.log(`Invalid follower ID: ${follower.user}`);
+        // console.log(`Invalid follower ID: ${follower.user}`);
         throw new Error(`Invalid follower ID: ${follower.user}`);
       }
       return follower.user;
@@ -202,7 +208,7 @@ const getFollowers = async (req, res) => {
     console.error("Error followers:", error);
     res.status(500).json({ message: "Server error" });
   }
-};
+});
 
 
 
@@ -387,6 +393,7 @@ const unfollowUser = asyncHandler(async (req, res) => {
 export {
   createProfile,
   getProfileByUserId,
+  getProfileLinkByUserId,
   updateProfile,
   getFollowers,
   getFollowing,
